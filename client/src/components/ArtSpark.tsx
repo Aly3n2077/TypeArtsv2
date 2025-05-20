@@ -151,9 +151,9 @@ export default function ArtSpark({ viewedArtworks, likedArtworks, onAddToCart }:
                   </div>
                   <div className="bg-white dark:bg-slate-800 p-4">
                     <h3 className="text-xl font-bold">{artwork.title}</h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">by {artwork.artist?.username || 'Unknown Artist'}</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">by {typeof artwork.artistId === 'number' ? `Artist #${artwork.artistId}` : 'Unknown Artist'}</p>
                     <div className="flex justify-between items-center mt-2">
-                      <span className="font-semibold">${typeof artwork.price === 'number' ? artwork.price.toFixed(2) : artwork.price}</span>
+                      <span className="font-semibold">${artwork.price}</span>
                       <Button variant="outline" size="sm" asChild>
                         <Link to={`/artwork/${artwork.id}`}>View Details</Link>
                       </Button>

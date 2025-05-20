@@ -356,9 +356,8 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Use DatabaseStorage instead of MemStorage for production
+// Import the database connection
 import { db } from "./db";
-import { eq, and, desc } from "drizzle-orm";
 
 export class DatabaseStorage implements IStorage {
   // User operations
