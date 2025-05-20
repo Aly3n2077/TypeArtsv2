@@ -311,6 +311,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Seed the database with John Type's artwork
+  app.post('/api/seed-database', async (req, res) => {
+    try {
+      const { seedArtworks } = require('./seed-artworks');
+      const artworks = await seedArtworks();
+      res.json({ message: 'Database seeded successfully', artworksCount: artworks.length });
+    } catch (error) {
+      console.error('Error seeding database:', error);
+      res.status(500).json({ message: 'Failed to seed database' });
+    }
+  });
+  
   // Shipping cost calculation (simplified)
   app.post('/api/shipping/calculate', async (req, res) => {
     try {
