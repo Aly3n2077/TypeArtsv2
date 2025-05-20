@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Hero from "@/components/Hero";
 import ArtCategories from "@/components/ArtCategories";
@@ -8,6 +8,7 @@ import FeaturedArtists from "@/components/FeaturedArtists";
 import HowItWorks from "@/components/HowItWorks";
 import CallToAction from "@/components/CallToAction";
 import TrendingNow from "@/components/TrendingNow";
+import ArtSpark from "@/components/ArtSpark";
 import { Helmet } from "react-helmet-async";
 import { Artwork } from "@shared/schema";
 import { CardsStack } from "@/components/ui/cards-stack";
@@ -18,17 +19,51 @@ import { Link } from "wouter";
 const Home = () => {
   const [cart, setCart] = useState<Artwork[]>([]);
   const [likedArtworks, setLikedArtworks] = useState<number[]>([]);
+  const [viewedArtworks, setViewedArtworks] = useState<number[]>([]);
 
   // Fetch featured artworks for the card stack
   const { data: featuredArtworks, isLoading } = useQuery<Artwork[]>({
     queryKey: ['/api/artworks/featured'],
   });
+  
+  // Initialize browsing history from local storage
+  useEffect(() => {
+    const storedLiked = localStorage.getItem('likedArtworks');
+    const storedViewed = localStorage.getItem('viewedArtworks');
+    
+    if (storedLiked) {
+      try {
+        setLikedArtworks(JSON.parse(storedLiked));
+      } catch (e) {
+        console.error('Failed to parse liked artworks from localStorage');
+      }
+    }
+    
+    if (storedViewed) {
+      try {
+        setViewedArtworks(JSON.parse(storedViewed));
+      } catch (e) {
+        console.error('Failed to parse viewed artworks from localStorage');
+      }
+    }
+  }, []);
 
   // Function to handle card swipe votes
   const handleCardVote = (direction: "left" | "right", artwork: Artwork) => {
+    // Track viewed artwork
+    if (!viewedArtworks.includes(artwork.id)) {
+      const newViewedArtworks = [...viewedArtworks, artwork.id];
+      setViewedArtworks(newViewedArtworks);
+      // Save to local storage
+      localStorage.setItem('viewedArtworks', JSON.stringify(newViewedArtworks));
+    }
+    
     if (direction === "right") {
       // Like/Save the artwork
-      setLikedArtworks(prev => [...prev, artwork.id]);
+      const newLikedArtworks = [...likedArtworks, artwork.id];
+      setLikedArtworks(newLikedArtworks);
+      // Save to local storage
+      localStorage.setItem('likedArtworks', JSON.stringify(newLikedArtworks));
       // Also add to cart if they "liked" it
       addToCart(artwork);
     }
@@ -89,12 +124,12 @@ const Home = () => {
                   </div>
                   <div className="bg-white dark:bg-slate-800 p-4">
                     <h3 className="text-xl font-bold">{artwork.title}</h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">{artwork.artistName}</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">by {artwork.artist?.username || 'Unknown Artist'}</p>
                     <div className="flex justify-between items-center mt-2">
-                      <span className="font-semibold">${artwork.price.toFixed(2)}</span>
-                      <Link to={`/artwork/${artwork.id}`}>
-                        <Button variant="outline" size="sm">View Details</Button>
-                      </Link>
+                      <span className="font-semibold">${typeof artwork.price === 'number' ? artwork.price.toFixed(2) : artwork.price}</span>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link to={`/artwork/${artwork.id}`}>View Details</Link>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -112,6 +147,16 @@ const Home = () => {
       
       <TrendingNow />
       <FeaturedArtworks />
+      
+      {/* Art Spark - AI-powered art recommendation engine */}
+      {viewedArtworks.length > 0 && (
+        <ArtSpark 
+          viewedArtworks={viewedArtworks} 
+          likedArtworks={likedArtworks} 
+          onAddToCart={addToCart} 
+        />
+      )}
+      
       <ARPreview />
       <FeaturedArtists />
       <HowItWorks />

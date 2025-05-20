@@ -356,4 +356,178 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Use DatabaseStorage instead of MemStorage for production
+import { db } from "./db";
+import { eq, and, desc } from "drizzle-orm";
+
+export class DatabaseStorage implements IStorage {
+  // User operations
+  async getUserById(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser(user: InsertUser): Promise<User> {
+    const [newUser] = await db.insert(users).values(user).returning();
+    return newUser;
+  }
+
+  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined> {
+    const [updatedUser] = await db
+      .update(users)
+      .set({ ...userData })
+      .where(eq(users.id, id))
+      .returning();
+    return updatedUser;
+  }
+
+  // Category operations
+  async getAllCategories(): Promise<Category[]> {
+    return await db.select().from(categories);
+  }
+
+  async getCategoryById(id: number): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.id, id));
+    return category;
+  }
+
+  async createCategory(category: InsertCategory): Promise<Category> {
+    const [newCategory] = await db.insert(categories).values(category).returning();
+    return newCategory;
+  }
+
+  // Artwork operations
+  async getAllArtworks(): Promise<Artwork[]> {
+    return await db.select().from(artworks);
+  }
+
+  async getFeaturedArtworks(): Promise<Artwork[]> {
+    return await db
+      .select()
+      .from(artworks)
+      .where(eq(artworks.featured, true))
+      .limit(10);
+  }
+
+  async getNewArtworks(): Promise<Artwork[]> {
+    return await db
+      .select()
+      .from(artworks)
+      .orderBy(desc(artworks.createdAt))
+      .limit(10);
+  }
+
+  async getArtworkById(id: number): Promise<Artwork | undefined> {
+    const [artwork] = await db.select().from(artworks).where(eq(artworks.id, id));
+    return artwork;
+  }
+
+  async getArtworksByArtistId(artistId: number): Promise<Artwork[]> {
+    return await db.select().from(artworks).where(eq(artworks.artistId, artistId));
+  }
+
+  async getArtworksByCategory(categoryId: number): Promise<Artwork[]> {
+    const artworkIds = await db
+      .select()
+      .from(artworkCategories)
+      .where(eq(artworkCategories.categoryId, categoryId));
+
+    if (artworkIds.length === 0) return [];
+
+    const artworkIdList = artworkIds.map(ac => ac.artworkId);
+    return await db
+      .select()
+      .from(artworks)
+      .where(artworks.id.in(artworkIdList));
+  }
+
+  async createArtwork(artwork: InsertArtwork): Promise<Artwork> {
+    const [newArtwork] = await db.insert(artworks).values(artwork).returning();
+    return newArtwork;
+  }
+
+  async updateArtwork(id: number, artworkData: Partial<InsertArtwork>): Promise<Artwork | undefined> {
+    const [updatedArtwork] = await db
+      .update(artworks)
+      .set({ ...artworkData })
+      .where(eq(artworks.id, id))
+      .returning();
+    return updatedArtwork;
+  }
+
+  // Artwork-Category operations
+  async createArtworkCategory(artworkCategory: InsertArtworkCategory): Promise<ArtworkCategory> {
+    const [newArtworkCategory] = await db
+      .insert(artworkCategories)
+      .values(artworkCategory)
+      .returning();
+    return newArtworkCategory;
+  }
+
+  // Order operations
+  async createOrder(order: InsertOrder): Promise<Order> {
+    const [newOrder] = await db.insert(orders).values(order).returning();
+    return newOrder;
+  }
+
+  async getOrderById(id: number): Promise<Order | undefined> {
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
+    return order;
+  }
+
+  async getOrdersByUserId(userId: number): Promise<Order[]> {
+    return await db.select().from(orders).where(eq(orders.userId, userId));
+  }
+
+  async updateOrderStatus(id: number, status: string): Promise<Order | undefined> {
+    const [updatedOrder] = await db
+      .update(orders)
+      .set({ status })
+      .where(eq(orders.id, id))
+      .returning();
+    return updatedOrder;
+  }
+
+  // Order item operations
+  async createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem> {
+    const [newOrderItem] = await db.insert(orderItems).values(orderItem).returning();
+    return newOrderItem;
+  }
+
+  async getOrderItemsByOrderId(orderId: number): Promise<OrderItem[]> {
+    return await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+  }
+
+  // Favorite operations
+  async createFavorite(favorite: InsertFavorite): Promise<Favorite> {
+    const [newFavorite] = await db.insert(favorites).values(favorite).returning();
+    return newFavorite;
+  }
+
+  async getFavoritesByUserId(userId: number): Promise<Favorite[]> {
+    return await db.select().from(favorites).where(eq(favorites.userId, userId));
+  }
+
+  async deleteFavorite(userId: number, artworkId: number): Promise<void> {
+    await db
+      .delete(favorites)
+      .where(
+        and(
+          eq(favorites.userId, userId),
+          eq(favorites.artworkId, artworkId)
+        )
+      );
+  }
+}
+
+export const storage = new DatabaseStorage();
