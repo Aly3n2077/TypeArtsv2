@@ -135,6 +135,13 @@ const Header = ({ user, onLogin, onLogout, cartItemCount }: HeaderProps) => {
                 About
               </a>
             </Link>
+            {user && (
+              <Link href="/dashboard">
+                <a className={`text-dark hover:text-accent font-accent font-medium ${location === '/dashboard' ? 'text-accent' : ''}`}>
+                  Dashboard
+                </a>
+              </Link>
+            )}
           </nav>
           
           {/* Desktop User Actions */}
