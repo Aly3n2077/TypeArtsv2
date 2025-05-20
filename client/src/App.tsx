@@ -13,6 +13,7 @@ import Artist from "@/pages/artist";
 import Checkout from "@/pages/checkout";
 import About from "@/pages/about";
 import Dashboard from "@/pages/dashboard";
+import Journeys from "@/pages/journeys";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -138,6 +139,7 @@ function App() {
         <Route path="/artist/:id" component={ArtistWrapper} />
         <Route path="/checkout" component={CheckoutWrapper} />
         <Route path="/about" component={About} />
+        <Route path="/journeys" component={Journeys} />
         <Route path="/dashboard">
           {() => user ? <Dashboard /> : <NotFound />}
         </Route>

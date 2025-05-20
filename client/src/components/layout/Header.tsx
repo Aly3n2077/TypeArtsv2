@@ -135,6 +135,11 @@ const Header = ({ user, onLogin, onLogout, cartItemCount }: HeaderProps) => {
                 About
               </a>
             </Link>
+            <Link href="/journeys">
+              <a className={`text-dark hover:text-accent font-accent font-medium ${location === '/journeys' ? 'text-accent' : ''}`}>
+                How It Works
+              </a>
+            </Link>
             {user && (
               <Link href="/dashboard">
                 <a className={`text-dark hover:text-accent font-accent font-medium ${location === '/dashboard' ? 'text-accent' : ''}`}>
