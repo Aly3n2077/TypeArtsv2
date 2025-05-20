@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Hero from "@/components/Hero";
 import ArtCategories from "@/components/ArtCategories";
 import FeaturedArtworks from "@/components/FeaturedArtworks";
@@ -5,9 +7,25 @@ import ARPreview from "@/components/ARPreview";
 import FeaturedArtists from "@/components/FeaturedArtists";
 import HowItWorks from "@/components/HowItWorks";
 import CallToAction from "@/components/CallToAction";
+import TrendingNow from "@/components/TrendingNow";
 import { Helmet } from "react-helmet-async";
+import { Artwork } from "@shared/schema";
 
 const Home = () => {
+  const [cart, setCart] = useState<Artwork[]>([]);
+
+  // Function to add artwork to cart
+  const addToCart = (artwork: Artwork) => {
+    setCart(prev => {
+      // Check if already in cart
+      const exists = prev.find(item => item.id === artwork.id);
+      if (exists) {
+        return prev; // Already in cart, don't add again
+      }
+      return [...prev, artwork];
+    });
+  };
+
   return (
     <>
       <Helmet>
@@ -20,6 +38,7 @@ const Home = () => {
       
       <Hero />
       <ArtCategories />
+      <TrendingNow />
       <FeaturedArtworks />
       <ARPreview />
       <FeaturedArtists />
