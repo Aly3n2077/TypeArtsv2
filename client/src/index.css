@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 220 14% 15%; /* #293241 */
+  --muted: 210 33% 96%; /* #E0FBFC */
+  --muted-foreground: 220 14% 40%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 14% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 14% 15%;
+  --border: 220 13% 90%;
+  --input: 220 13% 90%;
+  --primary: 215 36% 37%; /* #3D5A80 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 200 50% 72%; /* #98C1D9 */
+  --secondary-foreground: 220 14% 15%;
+  --accent: 14 80% 62%; /* #EE6C4D */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 215 36% 37%;
+  --radius: 0.5rem;
+  
+  /* Added specific colors from the design */
+  --light: 180 82% 93%; /* #E0FBFC */
+  --dark: 220 14% 15%; /* #293241 */
+  --success: 150 50% 47%; /* #3CB371 */
+  --error: 4 90% 58%; /* #F44336 */
+  --warning: 36 100% 50%; /* #FF9800 */
+}
+
+.dark {
+  --background: 220 14% 15%;
+  --foreground: 0 0% 98%;
+  --muted: 210 33% 20%;
+  --muted-foreground: 0 0% 70%;
+  --popover: 220 14% 15%;
+  --popover-foreground: 0 0% 98%;
+  --card: 220 14% 15%;
+  --card-foreground: 0 0% 98%;
+  --border: 215 28% 25%;
+  --input: 215 28% 25%;
+  --primary: 215 36% 37%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 200 50% 45%;
+  --secondary-foreground: 0 0% 100%;
+  --accent: 14 80% 62%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 215 36% 37%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+  
+  /* Add the font families from the design */
+  .font-heading {
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .font-accent {
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+@layer components {
+  /* Styling for artwork cards */
+  .artwork-card {
+    @apply bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow;
+  }
+  
+  .artwork-card:hover .overlay {
+    @apply opacity-100;
+  }
+  
+  .artwork-card img {
+    @apply transition-transform duration-300 ease-in-out object-cover;
+  }
+  
+  .artwork-card:hover img {
+    @apply scale-[1.03];
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-200 ease-in-out;
+  }
+  
+  .hover-scale:hover {
+    @apply scale-105;
+  }
+}

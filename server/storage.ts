@@ -1,0 +1,359 @@
+import {
+  users, type User, type InsertUser,
+  artworks, type Artwork, type InsertArtwork,
+  categories, type Category, type InsertCategory,
+  artworkCategories, type ArtworkCategory, type InsertArtworkCategory,
+  orders, type Order, type InsertOrder,
+  orderItems, type OrderItem, type InsertOrderItem,
+  favorites, type Favorite, type InsertFavorite
+} from "@shared/schema";
+import { eq, and, inArray } from "drizzle-orm";
+
+// Storage interface for all CRUD operations
+export interface IStorage {
+  // User operations
+  getUserById(id: number): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
+  updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined>;
+  
+  // Category operations
+  getAllCategories(): Promise<Category[]>;
+  getCategoryById(id: number): Promise<Category | undefined>;
+  createCategory(category: InsertCategory): Promise<Category>;
+  
+  // Artwork operations
+  getAllArtworks(): Promise<Artwork[]>;
+  getFeaturedArtworks(): Promise<Artwork[]>;
+  getNewArtworks(): Promise<Artwork[]>;
+  getArtworkById(id: number): Promise<Artwork | undefined>;
+  getArtworksByArtistId(artistId: number): Promise<Artwork[]>;
+  getArtworksByCategory(categoryId: number): Promise<Artwork[]>;
+  createArtwork(artwork: InsertArtwork): Promise<Artwork>;
+  updateArtwork(id: number, artworkData: Partial<InsertArtwork>): Promise<Artwork | undefined>;
+  
+  // Artwork-Category operations
+  createArtworkCategory(artworkCategory: InsertArtworkCategory): Promise<ArtworkCategory>;
+  
+  // Order operations
+  createOrder(order: InsertOrder): Promise<Order>;
+  getOrderById(id: number): Promise<Order | undefined>;
+  getOrdersByUserId(userId: number): Promise<Order[]>;
+  updateOrderStatus(id: number, status: string): Promise<Order | undefined>;
+  
+  // Order item operations
+  createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem>;
+  getOrderItemsByOrderId(orderId: number): Promise<OrderItem[]>;
+  
+  // Favorite operations
+  createFavorite(favorite: InsertFavorite): Promise<Favorite>;
+  getFavoritesByUserId(userId: number): Promise<Favorite[]>;
+  deleteFavorite(userId: number, artworkId: number): Promise<void>;
+}
+
+export class MemStorage implements IStorage {
+  private users: Map<number, User>;
+  private categories: Map<number, Category>;
+  private artworks: Map<number, Artwork>;
+  private artworkCategories: Map<number, ArtworkCategory>;
+  private orders: Map<number, Order>;
+  private orderItems: Map<number, OrderItem>;
+  private favorites: Map<number, Favorite>;
+  
+  private userId: number = 1;
+  private categoryId: number = 1;
+  private artworkId: number = 1;
+  private artworkCategoryId: number = 1;
+  private orderId: number = 1;
+  private orderItemId: number = 1;
+  private favoriteId: number = 1;
+  
+  constructor() {
+    this.users = new Map();
+    this.categories = new Map();
+    this.artworks = new Map();
+    this.artworkCategories = new Map();
+    this.orders = new Map();
+    this.orderItems = new Map();
+    this.favorites = new Map();
+    
+    // Initialize with sample data
+    this.initSampleData();
+  }
+  
+  private initSampleData() {
+    // Initialize with categories
+    const categoryData: InsertCategory[] = [
+      { name: 'Paintings', description: 'Original paintings in various styles and mediums', imageUrl: 'https://pixabay.com/get/g9204b5672bb74636973af60a666baf740854da7c8b154c26494a47562d6dc9a0710abed3993ac93f673cdfe79481cc85a30800035191a08f782555c46551cd3c_1280.jpg', artworkCount: 2453 },
+      { name: 'Sculpture', description: 'Three-dimensional artworks in various materials', imageUrl: 'https://pixabay.com/get/ga08d9b4891d35e8b544cefb8bdbc0302533ab3c0c92448e3c2e2eed28844d5fedc0297c4830bcab65f9d51779d98da3b1f59ea13dea2c20b831040da3fe6eb6a_1280.jpg', artworkCount: 1237 },
+      { name: 'Digital Art', description: 'Art created or presented using digital technology', imageUrl: 'https://pixabay.com/get/ge61ff26c67b87c5411ec3d8d4d772d17aeeadcfd43d2d0d58ee8e358f95de1a0c5ed6d55cd9a13ca65e24fdbd1a2adf55e49689c5eb54f893ee85ddf5d496034_1280.jpg', artworkCount: 954 },
+      { name: 'Photography', description: 'Fine art photography prints and limited editions', imageUrl: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=350', artworkCount: 1782 },
+    ];
+    
+    categoryData.forEach(cat => this.createCategory(cat));
+    
+    // Initialize with users (artists)
+    const artistData: InsertUser[] = [
+      { 
+        username: 'sarawalters', 
+        email: 'sara@example.com', 
+        password: 'password123', 
+        firstName: 'Sara', 
+        lastName: 'Walters', 
+        bio: 'Contemporary abstract painter known for vibrant color palettes and dynamic compositions that evoke emotional resonance.',
+        profileImageUrl: 'https://images.unsplash.com/photo-1542103749-8ef59b94f47e',
+        location: 'New York, USA',
+        isArtist: true,
+        isCollector: false
+      },
+      { 
+        username: 'davidchen', 
+        email: 'david@example.com', 
+        password: 'password123', 
+        firstName: 'David', 
+        lastName: 'Chen', 
+        bio: 'Traditional oil painter specializing in atmospheric landscapes that capture the serene beauty of the Pacific Northwest.',
+        profileImageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
+        location: 'Vancouver, Canada',
+        isArtist: true,
+        isCollector: false
+      },
+      { 
+        username: 'jasmine', 
+        email: 'jasmine@example.com', 
+        password: 'password123', 
+        firstName: 'Jasmine', 
+        lastName: 'Lee', 
+        bio: 'Contemporary sculptor working with bronze and mixed media to create pieces that explore urban identity and movement.',
+        profileImageUrl: 'https://images.unsplash.com/photo-1542206395-9feb3edaa68d',
+        location: 'Seoul, South Korea',
+        isArtist: true,
+        isCollector: false
+      }
+    ];
+    
+    const artists = artistData.map(artist => this.createUser(artist));
+    
+    // Initialize with artworks
+    const artworkData: InsertArtwork[] = [
+      {
+        title: 'Chromatic Dreams',
+        description: 'A vibrant abstract painting exploring the relationship between color and emotion.',
+        price: '3200',
+        imageUrl: 'https://images.unsplash.com/photo-1549490349-8643362247b5',
+        artistId: 1,
+        medium: 'Acrylic',
+        style: 'Abstract',
+        width: '36',
+        height: '48',
+        depth: '1.5',
+        year: 2023,
+        isFeatured: true,
+        isNew: false
+      },
+      {
+        title: 'Serene Horizon',
+        description: 'A peaceful landscape capturing the tranquility of a mountain lake at dawn.',
+        price: '4850',
+        imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5',
+        artistId: 2,
+        medium: 'Oil',
+        style: 'Landscape',
+        width: '40',
+        height: '30',
+        depth: '1.5',
+        year: 2023,
+        isFeatured: false,
+        isNew: false
+      },
+      {
+        title: 'Urban Rhythm',
+        description: 'A bronze sculpture depicting the flow and energy of city life.',
+        price: '7500',
+        imageUrl: 'https://pixabay.com/get/gfce8226febed1f309a0882950f8176e12fb8e7aad3518f09345f9f1b35e8fa93e33784a5e18466038fafadcc49e8c7d6fa094fe8a36d6b0f89a30ef4881a626b_1280.jpg',
+        artistId: 3,
+        medium: 'Bronze',
+        style: 'Contemporary',
+        width: '18',
+        height: '24',
+        depth: '12',
+        year: 2023,
+        isFeatured: false,
+        isNew: true
+      }
+    ];
+    
+    artworkData.forEach(artwork => this.createArtwork(artwork));
+    
+    // Connect artworks to categories
+    this.createArtworkCategory({ artworkId: 1, categoryId: 1 }); // Chromatic Dreams - Paintings
+    this.createArtworkCategory({ artworkId: 2, categoryId: 1 }); // Serene Horizon - Paintings
+    this.createArtworkCategory({ artworkId: 3, categoryId: 2 }); // Urban Rhythm - Sculpture
+  }
+  
+  // User operations
+  async getUserById(id: number): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+  
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.username === username);
+  }
+  
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.email === email);
+  }
+  
+  async createUser(user: InsertUser): Promise<User> {
+    const id = this.userId++;
+    const createdAt = new Date();
+    const newUser: User = { ...user, id, createdAt };
+    this.users.set(id, newUser);
+    return newUser;
+  }
+  
+  async updateUser(id: number, userData: Partial<InsertUser>): Promise<User | undefined> {
+    const user = this.users.get(id);
+    if (!user) return undefined;
+    
+    const updatedUser: User = { ...user, ...userData };
+    this.users.set(id, updatedUser);
+    return updatedUser;
+  }
+  
+  // Category operations
+  async getAllCategories(): Promise<Category[]> {
+    return Array.from(this.categories.values());
+  }
+  
+  async getCategoryById(id: number): Promise<Category | undefined> {
+    return this.categories.get(id);
+  }
+  
+  async createCategory(category: InsertCategory): Promise<Category> {
+    const id = this.categoryId++;
+    const newCategory: Category = { ...category, id };
+    this.categories.set(id, newCategory);
+    return newCategory;
+  }
+  
+  // Artwork operations
+  async getAllArtworks(): Promise<Artwork[]> {
+    return Array.from(this.artworks.values());
+  }
+  
+  async getFeaturedArtworks(): Promise<Artwork[]> {
+    return Array.from(this.artworks.values()).filter(artwork => artwork.isFeatured);
+  }
+  
+  async getNewArtworks(): Promise<Artwork[]> {
+    return Array.from(this.artworks.values()).filter(artwork => artwork.isNew);
+  }
+  
+  async getArtworkById(id: number): Promise<Artwork | undefined> {
+    return this.artworks.get(id);
+  }
+  
+  async getArtworksByArtistId(artistId: number): Promise<Artwork[]> {
+    return Array.from(this.artworks.values()).filter(artwork => artwork.artistId === artistId);
+  }
+  
+  async getArtworksByCategory(categoryId: number): Promise<Artwork[]> {
+    const artworkCategoryEntries = Array.from(this.artworkCategories.values())
+      .filter(ac => ac.categoryId === categoryId);
+    
+    const artworkIds = artworkCategoryEntries.map(ac => ac.artworkId);
+    
+    return Array.from(this.artworks.values())
+      .filter(artwork => artworkIds.includes(artwork.id));
+  }
+  
+  async createArtwork(artwork: InsertArtwork): Promise<Artwork> {
+    const id = this.artworkId++;
+    const createdAt = new Date();
+    const newArtwork: Artwork = { ...artwork, id, createdAt };
+    this.artworks.set(id, newArtwork);
+    return newArtwork;
+  }
+  
+  async updateArtwork(id: number, artworkData: Partial<InsertArtwork>): Promise<Artwork | undefined> {
+    const artwork = this.artworks.get(id);
+    if (!artwork) return undefined;
+    
+    const updatedArtwork: Artwork = { ...artwork, ...artworkData };
+    this.artworks.set(id, updatedArtwork);
+    return updatedArtwork;
+  }
+  
+  // Artwork-Category operations
+  async createArtworkCategory(artworkCategory: InsertArtworkCategory): Promise<ArtworkCategory> {
+    const id = this.artworkCategoryId++;
+    const newArtworkCategory: ArtworkCategory = { ...artworkCategory, id };
+    this.artworkCategories.set(id, newArtworkCategory);
+    return newArtworkCategory;
+  }
+  
+  // Order operations
+  async createOrder(order: InsertOrder): Promise<Order> {
+    const id = this.orderId++;
+    const createdAt = new Date();
+    const newOrder: Order = { ...order, id, createdAt };
+    this.orders.set(id, newOrder);
+    return newOrder;
+  }
+  
+  async getOrderById(id: number): Promise<Order | undefined> {
+    return this.orders.get(id);
+  }
+  
+  async getOrdersByUserId(userId: number): Promise<Order[]> {
+    return Array.from(this.orders.values()).filter(order => order.userId === userId);
+  }
+  
+  async updateOrderStatus(id: number, status: string): Promise<Order | undefined> {
+    const order = this.orders.get(id);
+    if (!order) return undefined;
+    
+    const updatedOrder: Order = { ...order, status };
+    this.orders.set(id, updatedOrder);
+    return updatedOrder;
+  }
+  
+  // Order item operations
+  async createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem> {
+    const id = this.orderItemId++;
+    const newOrderItem: OrderItem = { ...orderItem, id };
+    this.orderItems.set(id, newOrderItem);
+    return newOrderItem;
+  }
+  
+  async getOrderItemsByOrderId(orderId: number): Promise<OrderItem[]> {
+    return Array.from(this.orderItems.values()).filter(item => item.orderId === orderId);
+  }
+  
+  // Favorite operations
+  async createFavorite(favorite: InsertFavorite): Promise<Favorite> {
+    const id = this.favoriteId++;
+    const createdAt = new Date();
+    const newFavorite: Favorite = { ...favorite, id, createdAt };
+    this.favorites.set(id, newFavorite);
+    return newFavorite;
+  }
+  
+  async getFavoritesByUserId(userId: number): Promise<Favorite[]> {
+    return Array.from(this.favorites.values()).filter(favorite => favorite.userId === userId);
+  }
+  
+  async deleteFavorite(userId: number, artworkId: number): Promise<void> {
+    const favorite = Array.from(this.favorites.values()).find(
+      fav => fav.userId === userId && fav.artworkId === artworkId
+    );
+    
+    if (favorite) {
+      this.favorites.delete(favorite.id);
+    }
+  }
+}
+
+export const storage = new MemStorage();
