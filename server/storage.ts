@@ -96,6 +96,18 @@ export class MemStorage implements IStorage {
     // Initialize with users (artists)
     const artistData: InsertUser[] = [
       { 
+        username: 'johntype', 
+        email: 'john.type@example.com', 
+        password: 'securepassword', 
+        firstName: 'John', 
+        lastName: 'Type', 
+        bio: 'John grew up in Chitungwiza and started sculpting in 1989 with a sculptor called Kennedy Migeal, working as his assistant. After a year or so John started sculpting in his own right. John prefers to sculpt in abstract form and captures the grace and movement of each subject. Each piece will have a story to tell, which comes from experience and inspiration in his surrounding environment. John believes he is gifted by God to create such art forms, as he is the only one in his family that is sculpting. John has an ability to use the natural and spiritual elements of stone to create works of art that are incredibly expressive of movement and formation. Most of Johns works are in private collections around the world, from Germany, Canada, Belgium, Holland, the U.S. and the UK.',
+        profileImageUrl: 'https://images.unsplash.com/photo-1516756587022-7891ad56a8cd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+        location: 'Chitungwiza, Zimbabwe',
+        isArtist: true,
+        isCollector: false
+      },
+      { 
         username: 'sarawalters', 
         email: 'sara@example.com', 
         password: 'password123', 
@@ -529,4 +541,5 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+// Use MemStorage for now to avoid database connectivity issues
+export const storage = new MemStorage();
