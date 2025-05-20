@@ -58,6 +58,58 @@ const Home = () => {
       
       <Hero />
       <ArtCategories />
+      
+      {/* Interactive artwork discovery carousel */}
+      <section className="py-20 px-4 bg-slate-50 dark:bg-slate-900">
+        <div className="container mx-auto text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Discover New Art</h2>
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+            Swipe through our curated collection and discover artwork that speaks to you.
+            Swipe right to like, left to skip.
+          </p>
+        </div>
+        
+        <div className="max-w-md mx-auto h-[550px]">
+          {isLoading ? (
+            <div className="h-full flex items-center justify-center">
+              <div className="animate-spin w-10 h-10 border-4 border-primary border-t-transparent rounded-full"></div>
+            </div>
+          ) : featuredArtworks && featuredArtworks.length > 0 ? (
+            <CardsStack
+              onVote={(direction) => {
+                if (featuredArtworks[0]) {
+                  handleCardVote(direction, featuredArtworks[0]);
+                }
+              }}
+            >
+              {featuredArtworks.map((artwork) => (
+                <div key={artwork.id} className="w-full h-full flex flex-col">
+                  <div className="flex-grow bg-cover bg-center" 
+                       style={{ backgroundImage: `url(${artwork.imageUrl})` }}>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-4">
+                    <h3 className="text-xl font-bold">{artwork.title}</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">{artwork.artistName}</p>
+                    <div className="flex justify-between items-center mt-2">
+                      <span className="font-semibold">${artwork.price.toFixed(2)}</span>
+                      <Link to={`/artwork/${artwork.id}`}>
+                        <Button variant="outline" size="sm">View Details</Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </CardsStack>
+          ) : (
+            <div className="h-full flex items-center justify-center">
+              <div className="text-center p-8 border border-dashed rounded-lg">
+                <p className="text-slate-500 dark:text-slate-400">No artworks found</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+      
       <TrendingNow />
       <FeaturedArtworks />
       <ARPreview />
