@@ -11,8 +11,7 @@ export async function seedArtworks() {
     // Check if artworks already exist for this artist
     const existingArtworks = await db.select()
       .from(artworks)
-      .where((artwork) => artwork.artistId.equals(johnType.id))
-      .execute();
+      .where(eq(artworks.artistId, johnType.id));
       
     if (existingArtworks.length === 0) {
       // Add John Type's sculptures

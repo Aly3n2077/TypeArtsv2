@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { seedArtworks } from "./seed-artworks";
 
 const app = express();
 app.use(express.json());
@@ -37,6 +38,14 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Seed the database with John Type's artwork
+  try {
+    await seedArtworks();
+    log("Successfully seeded database with John Type's artwork");
+  } catch (error) {
+    log("Error seeding database: " + error);
+  }
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

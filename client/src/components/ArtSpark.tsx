@@ -27,6 +27,11 @@ export default function ArtSpark({ viewedArtworks, likedArtworks, onAddToCart }:
     queryKey: ['/api/categories'],
   });
   
+  // Fetch all artists
+  const { data: artists, isLoading: isArtistsLoading } = useQuery({
+    queryKey: ['/api/users'],
+  });
+  
   // Generate recommendations based on user's browsing history
   useEffect(() => {
     if (!allArtworks || allArtworks.length === 0 || viewedArtworks.length === 0) return;
@@ -106,7 +111,7 @@ export default function ArtSpark({ viewedArtworks, likedArtworks, onAddToCart }:
     }
   };
   
-  if (isAllArtworksLoading || isCategoriesLoading) {
+  if (isAllArtworksLoading || isCategoriesLoading || isArtistsLoading) {
     return (
       <div className="flex justify-center items-center py-12">
         <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
@@ -151,7 +156,13 @@ export default function ArtSpark({ viewedArtworks, likedArtworks, onAddToCart }:
                   </div>
                   <div className="bg-white dark:bg-slate-800 p-4">
                     <h3 className="text-xl font-bold">{artwork.title}</h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">by {typeof artwork.artistId === 'number' ? `Artist #${artwork.artistId}` : 'Unknown Artist'}</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">by {
+                      artists && artists.length > 0 ? 
+                        artists.find(a => a.id === artwork.artistId)?.firstName && artists.find(a => a.id === artwork.artistId)?.lastName ?
+                          `${artists.find(a => a.id === artwork.artistId)?.firstName} ${artists.find(a => a.id === artwork.artistId)?.lastName}` :
+                          artists.find(a => a.id === artwork.artistId)?.username || `Artist #${artwork.artistId}`
+                        : `Artist #${artwork.artistId}`
+                    }</p>
                     <div className="flex justify-between items-center mt-2">
                       <span className="font-semibold">${artwork.price}</span>
                       <Button variant="outline" size="sm" asChild>
