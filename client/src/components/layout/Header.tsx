@@ -108,43 +108,43 @@ const Header = ({ user, onLogin, onLogout, cartItemCount }: HeaderProps) => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link href="/">
-            <a className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 cursor-pointer">
               <span className="text-primary text-2xl font-heading font-bold">TypeArts</span>
-            </a>
+            </div>
           </Link>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link href="/browse">
-              <a className={`text-dark hover:text-accent font-accent font-medium ${location === '/browse' ? 'text-accent' : ''}`}>
+              <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location === '/browse' ? 'text-accent' : ''}`}>
                 Discover
-              </a>
+              </div>
             </Link>
             <Link href="/browse?type=artist">
-              <a className={`text-dark hover:text-accent font-accent font-medium ${location.includes('type=artist') ? 'text-accent' : ''}`}>
+              <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location.includes('type=artist') ? 'text-accent' : ''}`}>
                 Artists
-              </a>
+              </div>
             </Link>
             <Link href="/browse?type=collection">
-              <a className={`text-dark hover:text-accent font-accent font-medium ${location.includes('type=collection') ? 'text-accent' : ''}`}>
+              <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location.includes('type=collection') ? 'text-accent' : ''}`}>
                 Collections
-              </a>
+              </div>
             </Link>
             <Link href="/about">
-              <a className={`text-dark hover:text-accent font-accent font-medium ${location === '/about' ? 'text-accent' : ''}`}>
+              <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location === '/about' ? 'text-accent' : ''}`}>
                 About
-              </a>
+              </div>
             </Link>
             <Link href="/journeys">
-              <a className={`text-dark hover:text-accent font-accent font-medium ${location === '/journeys' ? 'text-accent' : ''}`}>
+              <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location === '/journeys' ? 'text-accent' : ''}`}>
                 How It Works
-              </a>
+              </div>
             </Link>
             {user && (
               <Link href="/dashboard">
-                <a className={`text-dark hover:text-accent font-accent font-medium ${location === '/dashboard' ? 'text-accent' : ''}`}>
+                <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location === '/dashboard' ? 'text-accent' : ''}`}>
                   Dashboard
-                </a>
+                </div>
               </Link>
             )}
           </nav>
@@ -154,14 +154,14 @@ const Header = ({ user, onLogin, onLogout, cartItemCount }: HeaderProps) => {
             {user ? (
               <>
                 <Link href="/cart">
-                  <a className="relative">
+                  <div className="relative cursor-pointer">
                     <ShoppingCart className="text-primary hover:text-accent transition-colors" />
                     {cartItemCount > 0 && (
                       <span className="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                         {cartItemCount}
                       </span>
                     )}
-                  </a>
+                  </div>
                 </Link>
                 <div className="flex items-center space-x-2">
                   <div className="text-sm font-medium">
@@ -421,24 +421,29 @@ const Header = ({ user, onLogin, onLogout, cartItemCount }: HeaderProps) => {
         <div className={`md:hidden transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'block' : 'hidden'}`}>
           <div className="py-4 space-y-3 border-t border-gray-100">
             <Link href="/browse">
-              <a className="block py-2 text-dark hover:text-accent font-accent font-medium">
+              <div className="block py-2 text-dark hover:text-accent font-accent font-medium cursor-pointer">
                 Discover
-              </a>
+              </div>
             </Link>
             <Link href="/browse?type=artist">
-              <a className="block py-2 text-dark hover:text-accent font-accent font-medium">
+              <div className="block py-2 text-dark hover:text-accent font-accent font-medium cursor-pointer">
                 Artists
-              </a>
+              </div>
             </Link>
             <Link href="/browse?type=collection">
-              <a className="block py-2 text-dark hover:text-accent font-accent font-medium">
+              <div className="block py-2 text-dark hover:text-accent font-accent font-medium cursor-pointer">
                 Collections
-              </a>
+              </div>
             </Link>
             <Link href="/about">
-              <a className="block py-2 text-dark hover:text-accent font-accent font-medium">
+              <div className="block py-2 text-dark hover:text-accent font-accent font-medium cursor-pointer">
                 About
-              </a>
+              </div>
+            </Link>
+            <Link href="/journeys">
+              <div className="block py-2 text-dark hover:text-accent font-accent font-medium cursor-pointer">
+                How It Works
+              </div>
             </Link>
             
             {user ? (
