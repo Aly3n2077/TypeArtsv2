@@ -16,6 +16,7 @@ import Dashboard from "@/pages/dashboard";
 import Journeys from "@/pages/journeys";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import SplashCursor from "@/components/ui/splash-cursor";
 
 function Router() {
   return (
@@ -152,7 +153,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <TooltipProvider>
-          <div className="flex flex-col min-h-screen">
+          {/* We'll update the background effect later */}
+          <div className="flex flex-col min-h-screen relative z-10">
             <Header 
               user={user} 
               onLogin={login} 

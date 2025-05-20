@@ -10,9 +10,29 @@ import CallToAction from "@/components/CallToAction";
 import TrendingNow from "@/components/TrendingNow";
 import { Helmet } from "react-helmet-async";
 import { Artwork } from "@shared/schema";
+import { CardsStack } from "@/components/ui/cards-stack";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 
 const Home = () => {
   const [cart, setCart] = useState<Artwork[]>([]);
+  const [likedArtworks, setLikedArtworks] = useState<number[]>([]);
+
+  // Fetch featured artworks for the card stack
+  const { data: featuredArtworks, isLoading } = useQuery<Artwork[]>({
+    queryKey: ['/api/artworks/featured'],
+  });
+
+  // Function to handle card swipe votes
+  const handleCardVote = (direction: "left" | "right", artwork: Artwork) => {
+    if (direction === "right") {
+      // Like/Save the artwork
+      setLikedArtworks(prev => [...prev, artwork.id]);
+      // Also add to cart if they "liked" it
+      addToCart(artwork);
+    }
+  };
 
   // Function to add artwork to cart
   const addToCart = (artwork: Artwork) => {
