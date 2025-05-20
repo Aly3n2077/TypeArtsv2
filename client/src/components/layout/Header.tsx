@@ -451,14 +451,14 @@ const Header = ({ user, onLogin, onLogout, cartItemCount }: HeaderProps) => {
                 <div className="flex items-center justify-between">
                   <div className="font-medium">{user.firstName || user.username}</div>
                   <Link href="/cart">
-                    <a className="relative">
+                    <div className="relative cursor-pointer">
                       <ShoppingCart className="text-primary hover:text-accent transition-colors" />
                       {cartItemCount > 0 && (
                         <span className="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                           {cartItemCount}
                         </span>
                       )}
-                    </a>
+                    </div>
                   </Link>
                 </div>
                 <button

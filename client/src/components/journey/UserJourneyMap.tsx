@@ -289,15 +289,18 @@ export default function UserJourneyMap() {
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="artist" className="flex items-center gap-2">
             <Palette className="h-4 w-4" />
-            <span>Artist Journey</span>
+            <span className="hidden xs:inline">Artist Journey</span>
+            <span className="xs:hidden">Artist</span>
           </TabsTrigger>
           <TabsTrigger value="collector" className="flex items-center gap-2">
             <ShoppingBag className="h-4 w-4" />
-            <span>Collector Journey</span>
+            <span className="hidden xs:inline">Collector Journey</span>
+            <span className="xs:hidden">Collector</span>
           </TabsTrigger>
           <TabsTrigger value="admin" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
-            <span>Admin Journey</span>
+            <span className="hidden xs:inline">Admin Journey</span>
+            <span className="xs:hidden">Admin</span>
           </TabsTrigger>
         </TabsList>
 
@@ -320,22 +323,22 @@ export default function UserJourneyMap() {
                         <div key={step.id} className="flex items-center">
                           <Button
                             variant={activeStep === step.id ? "default" : "outline"}
-                            size="lg"
-                            className={`rounded-full h-auto py-2 px-4 flex items-center gap-2 ${
+                            size="sm"
+                            className={`rounded-full h-auto py-2 px-3 md:px-4 flex items-center gap-1 md:gap-2 ${
                               activeStep === step.id ? "shadow-md" : ""
                             }`}
                             onClick={() => setActiveStep(step.id)}
                           >
                             {step.icon}
-                            <span className="hidden md:inline">{step.title}</span>
+                            <span className="hidden sm:inline">{step.title}</span>
                             {activeStep === step.id && (
-                              <Badge variant="secondary" className="ml-1 bg-white/20">
+                              <Badge variant="secondary" className="ml-1 bg-white/20 hidden sm:flex">
                                 <Check className="h-3 w-3" />
                               </Badge>
                             )}
                           </Button>
                           {index < journey.steps.length - 1 && (
-                            <ChevronRight className="h-5 w-5 mx-1 text-muted-foreground" />
+                            <ChevronRight className="h-4 w-4 mx-1 text-muted-foreground" />
                           )}
                         </div>
                       ))}
@@ -362,17 +365,17 @@ export default function UserJourneyMap() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                         {selectedStep.substeps?.map((substep, index) => (
                           <Card key={index} className="bg-white">
-                            <CardContent className="p-6">
-                              <div className="flex items-start gap-4">
-                                <div className="bg-primary/10 text-primary rounded-full p-2 mt-1">
+                            <CardContent className="p-4 md:p-6">
+                              <div className="flex items-start gap-3 md:gap-4">
+                                <div className="bg-primary/10 text-primary rounded-full p-2 mt-1 flex-shrink-0">
                                   <span className="font-bold text-sm">{index + 1}</span>
                                 </div>
                                 <div>
-                                  <h4 className="font-bold mb-1">{substep.title}</h4>
-                                  <p className="text-muted-foreground text-sm">
+                                  <h4 className="font-bold mb-1 text-sm md:text-base">{substep.title}</h4>
+                                  <p className="text-muted-foreground text-xs md:text-sm">
                                     {substep.description}
                                   </p>
                                 </div>

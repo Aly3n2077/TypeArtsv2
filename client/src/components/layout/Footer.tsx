@@ -7,9 +7,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
             <Link href="/">
-              <a className="flex items-center space-x-2 mb-6">
+              <div className="flex items-center space-x-2 mb-6 cursor-pointer">
                 <span className="text-white text-2xl font-heading font-bold">TypeArts</span>
-              </a>
+              </div>
             </Link>
             <p className="text-light/80 mb-6">
               A global marketplace connecting artists with collectors through innovative technology and seamless logistics.
