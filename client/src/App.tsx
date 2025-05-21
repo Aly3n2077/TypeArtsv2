@@ -14,6 +14,7 @@ import Checkout from "@/pages/checkout";
 import About from "@/pages/about";
 import Dashboard from "@/pages/dashboard";
 import Journeys from "@/pages/journeys";
+import Mission from "@/pages/mission";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SplashCursor from "@/components/ui/splash-cursor";
@@ -141,6 +142,7 @@ function App() {
         <Route path="/checkout" component={CheckoutWrapper} />
         <Route path="/about" component={About} />
         <Route path="/journeys" component={Journeys} />
+        <Route path="/mission" component={Mission} />
         <Route path="/dashboard">
           {() => user ? <Dashboard /> : <NotFound />}
         </Route>
