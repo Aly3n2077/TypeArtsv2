@@ -32,9 +32,9 @@ const HowItWorks = () => {
               </li>
             </ul>
             <Link href="/browse">
-              <a className="text-primary hover:text-accent transition-colors font-accent font-medium inline-flex items-center">
+              <div className="text-primary hover:text-accent transition-colors font-accent font-medium inline-flex items-center cursor-pointer">
                 Learn More <ArrowRight className="ml-1 h-4 w-4" />
-              </a>
+              </div>
             </Link>
           </div>
           
@@ -59,9 +59,9 @@ const HowItWorks = () => {
               </li>
             </ul>
             <Link href="/arpreview">
-              <a className="text-primary hover:text-accent transition-colors font-accent font-medium inline-flex items-center">
+              <div className="text-primary hover:text-accent transition-colors font-accent font-medium inline-flex items-center cursor-pointer">
                 Learn More <ArrowRight className="ml-1 h-4 w-4" />
-              </a>
+              </div>
             </Link>
           </div>
           
@@ -86,9 +86,9 @@ const HowItWorks = () => {
               </li>
             </ul>
             <Link href="/shipping">
-              <a className="text-primary hover:text-accent transition-colors font-accent font-medium inline-flex items-center">
+              <div className="text-primary hover:text-accent transition-colors font-accent font-medium inline-flex items-center cursor-pointer">
                 Learn More <ArrowRight className="ml-1 h-4 w-4" />
-              </a>
+              </div>
             </Link>
           </div>
         </div>
