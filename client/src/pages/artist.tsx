@@ -78,9 +78,9 @@ const ArtistPage = ({ onAddToCart }: ArtistPageProps) => {
       <div className="container mx-auto px-4 py-16 mt-16">
         <div className="mb-4">
           <Link href="/browse?type=artist">
-            <a className="text-primary hover:text-accent flex items-center font-medium">
+            <span className="text-primary hover:text-accent flex items-center font-medium cursor-pointer">
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Artists
-            </a>
+            </span>
           </Link>
         </div>
         

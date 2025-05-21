@@ -63,17 +63,20 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
   
-  /* Add the font families from the design */
+  /* Minimalistic font families for modern look */
   .font-heading {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 300;
   }
   
   .font-body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 300;
   }
   
   .font-accent {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 400;
   }
 }
 
