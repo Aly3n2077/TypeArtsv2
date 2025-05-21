@@ -14,14 +14,14 @@ const CallToAction = () => {
             
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link href="/signup">
-                <a className="bg-accent hover:bg-white hover:text-primary text-white font-accent font-semibold px-8 py-3 rounded-full transition-colors inline-flex items-center justify-center">
+                <button className="bg-accent hover:bg-white hover:text-primary text-white font-accent font-semibold px-8 py-3 rounded-full transition-colors inline-flex items-center justify-center">
                   <UserPlus className="mr-2 h-5 w-5" /> Create Account
-                </a>
+                </button>
               </Link>
               <Link href="/about">
-                <a className="bg-transparent hover:bg-white/10 text-white border border-white font-accent font-semibold px-8 py-3 rounded-full transition-colors inline-flex items-center justify-center">
+                <button className="bg-transparent hover:bg-white/10 text-white border border-white font-accent font-semibold px-8 py-3 rounded-full transition-colors inline-flex items-center justify-center">
                   <Info className="mr-2 h-5 w-5" /> Learn More
-                </a>
+                </button>
               </Link>
             </div>
           </div>
