@@ -130,14 +130,19 @@ const Header = ({ user, onLogin, onLogout, cartItemCount }: HeaderProps) => {
                 Collections
               </div>
             </Link>
-            <Link href="/about">
-              <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location === '/about' ? 'text-accent' : ''}`}>
-                About
-              </div>
-            </Link>
             <Link href="/journeys">
               <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location === '/journeys' ? 'text-accent' : ''}`}>
                 How It Works
+              </div>
+            </Link>
+            <Link href="/mission">
+              <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location === '/mission' ? 'text-accent' : ''}`}>
+                Our Mission
+              </div>
+            </Link>
+            <Link href="/about">
+              <div className={`text-dark hover:text-accent font-accent font-medium cursor-pointer ${location === '/about' ? 'text-accent' : ''}`}>
+                About
               </div>
             </Link>
             {user && (
@@ -433,6 +438,11 @@ const Header = ({ user, onLogin, onLogout, cartItemCount }: HeaderProps) => {
             <Link href="/browse?type=collection">
               <div className="block py-2 text-dark hover:text-accent font-accent font-medium cursor-pointer">
                 Collections
+              </div>
+            </Link>
+            <Link href="/mission">
+              <div className="block py-2 text-dark hover:text-accent font-accent font-medium cursor-pointer">
+                Our Mission
               </div>
             </Link>
             <Link href="/about">
