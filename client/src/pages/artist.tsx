@@ -125,15 +125,15 @@ const ArtistPage = ({ onAddToCart }: ArtistPageProps) => {
                 </Button>
                 
                 <div className="flex justify-center space-x-4 mt-4">
-                  <a href="#" className="text-primary hover:text-accent transition-colors">
+                  <button className="text-primary hover:text-accent transition-colors">
                     <Instagram className="h-5 w-5" />
-                  </a>
-                  <a href="#" className="text-primary hover:text-accent transition-colors">
+                  </button>
+                  <button className="text-primary hover:text-accent transition-colors">
                     <Twitter className="h-5 w-5" />
-                  </a>
-                  <a href="#" className="text-primary hover:text-accent transition-colors">
+                  </button>
+                  <button className="text-primary hover:text-accent transition-colors">
                     <Globe className="h-5 w-5" />
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -183,7 +183,7 @@ const ArtistPage = ({ onAddToCart }: ArtistPageProps) => {
                         <p className="text-gray-700 italic">
                           John Type is one of the co-founders of TypeArts. His abstract stone sculptures from Zimbabwe have influenced our 
                           <Link href="/mission">
-                            <a className="text-accent font-semibold mx-1 hover:underline">mission</a>
+                            <span className="text-accent font-semibold mx-1 hover:underline cursor-pointer">mission</span>
                           </Link>
                           to connect artists with collectors worldwide in a more meaningful way.
                         </p>
