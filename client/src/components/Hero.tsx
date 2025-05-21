@@ -13,14 +13,14 @@ const Hero = () => {
           </p>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
             <Link href="/browse">
-              <a className="bg-accent hover:bg-accent/90 text-white font-accent font-semibold rounded-full px-8 py-3 transition-colors text-center">
+              <button className="bg-accent hover:bg-accent/90 text-white font-accent font-semibold rounded-full px-8 py-3 transition-colors text-center w-full sm:w-auto">
                 Explore Artwork
-              </a>
+              </button>
             </Link>
             <Link href="/browse?type=artist">
-              <a className="bg-transparent hover:bg-white/10 text-white border border-white font-accent font-semibold rounded-full px-8 py-3 transition-colors text-center">
+              <button className="bg-transparent hover:bg-white/10 text-white border border-white font-accent font-semibold rounded-full px-8 py-3 transition-colors text-center w-full sm:w-auto">
                 Meet Artists
-              </a>
+              </button>
             </Link>
           </div>
         </div>
