@@ -235,16 +235,16 @@ export default function ArtworkCollection({
                   
                   <CardContent className="p-4">
                     <Link href={`/artwork/${artwork.id}`}>
-                      <a className="block hover:text-primary">
+                      <div className="block hover:text-primary cursor-pointer">
                         <h3 className="font-medium line-clamp-1">{artwork.title}</h3>
-                      </a>
+                      </div>
                     </Link>
                     
                     {artist && (
                       <Link href={`/artist/${artist.id}`}>
-                        <a className="text-sm text-muted-foreground hover:text-primary">
+                        <div className="text-sm text-muted-foreground hover:text-primary cursor-pointer">
                           {artist.firstName} {artist.lastName || ""}
-                        </a>
+                        </div>
                       </Link>
                     )}
                     
@@ -264,13 +264,13 @@ export default function ArtworkCollection({
         
         <div className="flex justify-center mt-6">
           <Link href="/browse">
-            <a className={cn(
-              "inline-flex items-center text-sm font-medium transition-colors",
+            <div className={cn(
+              "inline-flex items-center text-sm font-medium transition-colors cursor-pointer",
               "text-primary hover:text-primary/80"
             )}>
               View All
               <ChevronRight className="ml-1 h-4 w-4" />
-            </a>
+            </div>
           </Link>
         </div>
       </div>
