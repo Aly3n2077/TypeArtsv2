@@ -150,11 +150,41 @@ export class MemStorage implements IStorage {
     // Initialize with artworks
     const artworkData: InsertArtwork[] = [
       {
+        title: 'Harmony of Stone',
+        description: 'An abstract stone sculpture that captures the grace and movement of its subject, reflecting John Type\'s unique ability to blend natural and spiritual elements.',
+        price: '4500',
+        imageUrl: 'https://images.unsplash.com/photo-1620200423727-8127f75d4f3a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+        artistId: 1,
+        medium: 'Stone',
+        style: 'Abstract',
+        width: '24',
+        height: '36',
+        depth: '18',
+        year: 2023,
+        isFeatured: true,
+        isNew: true
+      },
+      {
+        title: 'Spiritual Movement',
+        description: 'A flowing abstract sculpture that demonstrates John Type\'s signature style, telling a story inspired by his surrounding environment in Zimbabwe.',
+        price: '5200',
+        imageUrl: 'https://images.unsplash.com/photo-1553292022-03ba522870d1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+        artistId: 1,
+        medium: 'Stone',
+        style: 'Abstract',
+        width: '30',
+        height: '42',
+        depth: '22',
+        year: 2022,
+        isFeatured: true,
+        isNew: false
+      },
+      {
         title: 'Chromatic Dreams',
         description: 'A vibrant abstract painting exploring the relationship between color and emotion.',
         price: '3200',
         imageUrl: 'https://images.unsplash.com/photo-1549490349-8643362247b5',
-        artistId: 1,
+        artistId: 2,
         medium: 'Acrylic',
         style: 'Abstract',
         width: '36',
@@ -199,9 +229,11 @@ export class MemStorage implements IStorage {
     artworkData.forEach(artwork => this.createArtwork(artwork));
     
     // Connect artworks to categories
-    this.createArtworkCategory({ artworkId: 1, categoryId: 1 }); // Chromatic Dreams - Paintings
-    this.createArtworkCategory({ artworkId: 2, categoryId: 1 }); // Serene Horizon - Paintings
-    this.createArtworkCategory({ artworkId: 3, categoryId: 2 }); // Urban Rhythm - Sculpture
+    this.createArtworkCategory({ artworkId: 1, categoryId: 2 }); // Harmony of Stone - Sculptures
+    this.createArtworkCategory({ artworkId: 2, categoryId: 2 }); // Spiritual Movement - Sculptures
+    this.createArtworkCategory({ artworkId: 3, categoryId: 1 }); // Chromatic Dreams - Paintings
+    this.createArtworkCategory({ artworkId: 4, categoryId: 1 }); // Serene Horizon - Paintings
+    this.createArtworkCategory({ artworkId: 5, categoryId: 2 }); // Urban Rhythm - Sculpture
   }
   
   // User operations
