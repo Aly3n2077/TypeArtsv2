@@ -103,9 +103,11 @@ const Header = ({ user, onLogin, onLogout, cartItemCount }: HeaderProps) => {
   };
   
   return (
-    <header className="bg-white shadow-sm fixed w-full top-0 z-50">
+    <header className="backdrop-blur-md bg-white/40 dark:bg-slate-900/30 fixed w-full top-0 z-50 border-b border-white/20">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-4 relative overflow-hidden">
+          {/* Glassmorphism effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-200/20 via-blue-100/15 to-pink-100/20 dark:from-purple-900/20 dark:via-blue-900/15 dark:to-pink-900/20 rounded-lg"></div>
           {/* Logo */}
           <Link href="/">
             <div className="flex items-center space-x-2 cursor-pointer">

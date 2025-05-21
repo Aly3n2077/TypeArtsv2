@@ -157,10 +157,16 @@ function App() {
       <HelmetProvider>
         <TooltipProvider>
           <div className="flex flex-col min-h-screen relative z-10">
-            {/* Glassmorphism background effect */}
-            <GlassmorphismBackground />
+            {/* Artistic background effects */}
+            {/* We'll fix SplashCursor in a future update */}
+            <GlassmorphismBackground 
+              intensity={0.5}
+              colorStart="rgba(128, 0, 128, 0.15)"
+              colorEnd="rgba(0, 0, 255, 0.15)"
+              speed={0.005}
+            />
             
-            <div className="backdrop-blur-sm bg-white/70 dark:bg-slate-900/70 min-h-screen">
+            <div className="backdrop-blur-md bg-white/40 dark:bg-slate-900/40 min-h-screen">
               <Header 
                 user={user} 
                 onLogin={login} 

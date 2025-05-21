@@ -1,101 +1,131 @@
-import React, { useEffect, useRef } from 'react';
+"use client";
+import { useEffect, useRef } from "react";
 
-const GlassmorphismBackground: React.FC = () => {
+interface GlassmorphismBackgroundProps {
+  intensity?: number;
+  colorStart?: string;
+  colorEnd?: string;
+  speed?: number;
+}
+
+export default function GlassmorphismBackground({
+  intensity = 0.3,
+  colorStart = "rgba(156, 39, 176, 0.2)",
+  colorEnd = "rgba(25, 118, 210, 0.2)",
+  speed = 0.01
+}: GlassmorphismBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Set canvas to full viewport size
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    // Circle parameters
-    const circleCount = 20;
     const circles: Circle[] = [];
+    const numCircles = 15;
+    const maxRadius = 150;
 
-    interface Circle {
-      x: number;
-      y: number;
-      radius: number;
-      dx: number;
-      dy: number;
-      color: string;
-    }
-
-    // Create random circles
-    for (let i = 0; i < circleCount; i++) {
-      const radius = Math.random() * 100 + 50;
+    for (let i = 0; i < numCircles; i++) {
       circles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius,
-        dx: (Math.random() - 0.5) * 0.5,
-        dy: (Math.random() - 0.5) * 0.5,
-        color: getRandomColor(0.1),
+        radius: Math.random() * maxRadius + 20,
+        dx: (Math.random() - 0.5) * speed,
+        dy: (Math.random() - 0.5) * speed,
+        color: getRandomColor()
       });
     }
 
-    function getRandomColor(opacity: number) {
-      const hue = Math.floor(Math.random() * 360);
-      return `hsla(${hue}, 70%, 60%, ${opacity})`;
+    function getRandomColor() {
+      const colors = [
+        "rgba(156, 39, 176, 0.2)",
+        "rgba(25, 118, 210, 0.2)",
+        "rgba(76, 175, 80, 0.2)",
+        "rgba(245, 124, 0, 0.2)",
+        "rgba(0, 137, 123, 0.2)"
+      ];
+      return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    function animate() {
+    function drawCircle(circle: Circle) {
+      if (!ctx || !canvas) return;
+      
+      const gradient = ctx.createRadialGradient(
+        circle.x,
+        circle.y,
+        0,
+        circle.x,
+        circle.y,
+        circle.radius
+      );
+      
+      gradient.addColorStop(0, circle.color);
+      gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+      
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function updateCanvas() {
+      if (!ctx || !canvas) return;
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+      
       for (const circle of circles) {
-        // Draw gradient circle
-        const gradient = ctx.createRadialGradient(
-          circle.x, circle.y, 0,
-          circle.x, circle.y, circle.radius
-        );
-        gradient.addColorStop(0, circle.color);
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-        ctx.beginPath();
-        ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-
-        // Move circle
+        // Update position
         circle.x += circle.dx;
         circle.y += circle.dy;
-
-        // Bounce off edges
-        if (circle.x - circle.radius < 0 || circle.x + circle.radius > canvas.width) {
+        
+        // Bounce off walls
+        if (circle.x + circle.radius > canvas.width || circle.x - circle.radius < 0) {
           circle.dx = -circle.dx;
         }
-        if (circle.y - circle.radius < 0 || circle.y + circle.radius > canvas.height) {
+        
+        if (circle.y + circle.radius > canvas.height || circle.y - circle.radius < 0) {
           circle.dy = -circle.dy;
         }
+        
+        drawCircle(circle);
       }
-
-      requestAnimationFrame(animate);
+      
+      requestAnimationFrame(updateCanvas);
     }
 
-    animate();
+    // Handle window resize
+    const handleResize = () => {
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener("resize", handleResize);
+    updateCanvas();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [intensity, colorStart, colorEnd, speed]);
 
   return (
-    <canvas 
-      ref={canvasRef} 
-      className="fixed top-0 left-0 w-full h-full -z-10"
-      style={{ pointerEvents: 'none' }}
+    <canvas
+      ref={canvasRef}
+      className="fixed top-0 left-0 w-full h-full -z-10 opacity-60"
     />
   );
-};
+}
 
-export default GlassmorphismBackground;
+interface Circle {
+  x: number;
+  y: number;
+  radius: number;
+  dx: number;
+  dy: number;
+  color: string;
+}

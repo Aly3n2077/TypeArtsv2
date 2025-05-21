@@ -178,6 +178,17 @@ const ArtistPage = ({ onAddToCart }: ArtistPageProps) => {
                     <p className="text-gray-700">
                       {artist.bio || "This artist has not provided a bio yet."}
                     </p>
+                    {artist.username === "johntype" && (
+                      <div className="mt-4 bg-secondary/10 p-4 rounded-lg border border-accent/20">
+                        <p className="text-gray-700 italic">
+                          John Type is one of the co-founders of TypeArts. His abstract stone sculptures from Zimbabwe have influenced our 
+                          <Link href="/mission">
+                            <a className="text-accent font-semibold mx-1 hover:underline">mission</a>
+                          </Link>
+                          to connect artists with collectors worldwide in a more meaningful way.
+                        </p>
+                      </div>
+                    )}
                   </div>
                   
                   <div>
