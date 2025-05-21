@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { Link } from "wouter";
 import { Separator } from "@/components/ui/separator";
 
 export default function About() {
@@ -23,9 +24,15 @@ export default function About() {
             <p className="text-muted-foreground mb-4">
               TypeArts was founded on a simple but powerful idea: to create meaningful connections between artists and art lovers worldwide through technology.
             </p>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mb-4">
               We believe that art has the power to transform spaces, inspire ideas, and connect people across cultures. Our mission is to make exceptional art accessible to everyone while providing artists with the platform they deserve.
             </p>
+            <Link to="/mission" className="inline-flex items-center gap-1 text-primary font-medium hover:underline mt-3">
+              Read our complete mission statement
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
           <div className="bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl p-8 aspect-square flex items-center justify-center">
             <div className="text-5xl font-bold text-primary/80 text-center leading-tight">

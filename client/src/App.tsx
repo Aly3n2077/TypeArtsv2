@@ -18,6 +18,7 @@ import Mission from "@/pages/mission";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SplashCursor from "@/components/ui/splash-cursor";
+import GlassmorphismBackground from "@/components/ui/glassmorphism-background";
 
 function Router() {
   return (
@@ -155,18 +156,22 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <TooltipProvider>
-          {/* We'll update the background effect later */}
           <div className="flex flex-col min-h-screen relative z-10">
-            <Header 
-              user={user} 
-              onLogin={login} 
-              onLogout={logout} 
-              cartItemCount={cart.reduce((total, item) => total + item.quantity, 0)} 
-            />
-            <main className="flex-grow">
-              <RouterWithProps />
-            </main>
-            <Footer />
+            {/* Glassmorphism background effect */}
+            <GlassmorphismBackground />
+            
+            <div className="backdrop-blur-sm bg-white/70 dark:bg-slate-900/70 min-h-screen">
+              <Header 
+                user={user} 
+                onLogin={login} 
+                onLogout={logout} 
+                cartItemCount={cart.reduce((total, item) => total + item.quantity, 0)} 
+              />
+              <main className="flex-grow">
+                <RouterWithProps />
+              </main>
+              <Footer />
+            </div>
           </div>
           <Toaster />
         </TooltipProvider>
